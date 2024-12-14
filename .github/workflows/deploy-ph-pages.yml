@@ -23,7 +23,7 @@ jobs:
         uses: SpicyPizza/create-envfile@v2.0
         with:
           envkey_REACT_APP_YUMEMI_API_KEY: ${{ secrets.YUMEMI_API_KEY }}
-          directory: /
+          directory: ./
           file_name: .env.production
           fail_on_empty: false
           sort_keys: false
@@ -33,21 +33,23 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    needs: create-envfile
     steps:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Setup Pages
         uses: actions/configure-pages@v3
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: "23"
+          cache: yarn
       - name: Install dependencies
-        run: npm install
+        run: yarn install --frozen-lockfile
       - name: Build
-        run: npm ci && npm run build
+        run: yarn build
         env:
-          PUBLIC_URL: /yumemi_coding_test_2024
+          GITHUB_PAGES: true
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
