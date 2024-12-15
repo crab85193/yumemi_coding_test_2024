@@ -7,6 +7,7 @@ import eslintConfigPrettier from "eslint-config-prettier";
 /** @type {import('eslint').Linter.Config[]} */
 export default [
   { files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"] },
+  { ignores: ["**/__test__/*"] },
   { languageOptions: { globals: globals.browser } },
   { rules: { "no-console": ["error"] } },
   pluginJs.configs.recommended,
