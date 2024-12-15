@@ -1,0 +1,34 @@
+.wrapper {
+  max-width: 1140px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.brand {
+  font-weight: bold;
+  font-size: 20px;
+  text-decoration: none;
+  color: #222;
+  padding: 1.5rem 1rem;
+}
+
+.site-header {
+  position: relative;
+  background-color: #def7ff;
+}
+
+.site-header__wrapper {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+@media (min-width: 600px) {
+  .site-header__wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
