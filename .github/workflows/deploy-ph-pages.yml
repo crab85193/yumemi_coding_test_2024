@@ -22,9 +22,10 @@ jobs:
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v2.0
         with:
+          envkey_REACT_APP_YUMEMI_API_URL: ${{ secrets.YUMEMI_API_URL }}
           envkey_REACT_APP_YUMEMI_API_KEY: ${{ secrets.YUMEMI_API_KEY }}
           directory: ./
-          file_name: .env.production
+          file_name: .env
           fail_on_empty: false
           sort_keys: false
 
