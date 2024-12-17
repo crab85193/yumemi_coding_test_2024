@@ -65,6 +65,9 @@
     "setupFiles": [
       "dotenv/config"
     ],
+    "setupFilesAfterEnv": [
+      "./src/tests/setupTests.ts"
+    ],
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     },
