@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { fetchPopulation } from "../api/population"; // 人口データを取得するAPI
-import { Prefecture } from "../types/prefecture"; // 都道府県の型
-import { PopulationCategory } from "../types/population"; // 人口データのカテゴリ型
+import { fetchPopulation } from "../api/population";
+import { Prefecture } from "../types/prefecture";
+import { PopulationCategory } from "../types/population";
 
 interface PopulationSelectorProps {
   prefectures: Prefecture[];
