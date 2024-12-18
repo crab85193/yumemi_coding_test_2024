@@ -1,46 +1,160 @@
-# Getting Started with Create React App
+# 株式会社ゆめみ様 2024年度フロントエンド課題
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[![React](https://img.shields.io/badge/React-19.0.0-58c4dc.svg?logo=react&style=plastic)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-4.4.2-3178c6.svg?logo=typescript&style=plastic)](https://www.typescriptlang.org/)
+[![Recharts](https://img.shields.io/badge/Recharts-2.15.0-1488C6.svg?style=plastic)](https://recharts.org/en-US/)
+[![Zustand](https://img.shields.io/badge/Zustand-5.0.2-1488C6.svg?style=plastic)](https://zustand-demo.pmnd.rs/)
+[![Axios](https://img.shields.io/badge/Axios-1.7.9-5A29E4.svg?logo=axios&style=plastic)](https://axios-http.com/)
+[![CI](https://github.com/crab85193/yumemi_coding_test_2024/actions/workflows/ci.yml/badge.svg)](https://github.com/crab85193/yumemi_coding_test_2024/actions/workflows/ci.yml)
+[![deploy-ph-pages](https://github.com/crab85193/yumemi_coding_test_2024/actions/workflows/deploy-ph-pages.yml/badge.svg)](https://github.com/crab85193/yumemi_coding_test_2024/actions/workflows/deploy-ph-pages.yml)
 
-## Available Scripts
+<p align="center">
+  <img src="./public/logo192.png" alt="logo" />
+</p>
 
-In the project directory, you can run:
+これは、株式会社ゆめみ様の2024年度フロントエンド課題提出用のリポジトリです。
 
-### `yarn start`
+ReactとTypeScriptを使用して構築されたレスポンシブなフロントエンドアプリケーションで、日本の複数の都道府県および様々な人口カテゴリにわたる人口データを視覚化します。ユーザーは複数の都道府県を選択し、「総人口」「年少人口」「生産年齢人口」「老年人口」などのカテゴリごとの人口推移を確認できます。
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## 特徴
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- **マルチカテゴリ・マルチ都道府県対応**: 「総人口」「年少人口」「生産年齢人口」「老年人口」などのカテゴリに対して、複数の都道府県の人口データを同時に表示。
+- **レスポンシブデザイン**: モバイルからデスクトップまで、幅広いデバイスで最適な表示を実現。
+- **動的なグラフ描画**: Rechartsを使用したインタラクティブな折れ線グラフで、各都道府県をユニークな色で表示。
+- **Zustandによる状態管理**: 選択された都道府県やカテゴリの状態を効率的に管理。
+- **堅牢なエラーハンドリング**: APIエラーやデータ取得失敗時に、ユーザーに適切なメッセージを表示。
+- **継続的インテグレーションとデプロイ**: GitHub Actionsを用いた自動テストおよびデプロイワークフロー。
 
-### `yarn test`
+## 使用技術
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **React**: ユーザーインターフェースの構築。
+- **TypeScrip**: 型付けされたJavaScriptでコードの品質向上。
+- **Recharts**: 動的でインタラクティブなグラフ描画ライブラリ。
+- **Zustand**: 軽量な状態管理ライブラリ。
+- **Axios**: APIリクエストを行うためのHTTPクライアント。
+- **GitHub Action**: 自動テストおよびデプロイ用のCI/CDパイプライン。
 
-### `yarn build`
+## インストール
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 前提条件
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- Node.js: Node.jsがインストールされていること（バージョン14以上推奨）。
+- Yarn: JavaScriptのパッケージマネージャー。
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 手順
 
-### `yarn eject`
+1. リポジトリをクローン
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```bash
+git clone https://github.com/yourusername/yumemi-population-graph.git
+cd yumemi-population-graph
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+2. 依存関係をインストール
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```bash
+yarn install
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+3. 環境変数の設定
 
-## Learn More
+プロジェクトのルートに .env ファイルを作成し、以下の内容を追加します。
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```env
+REACT_APP_YUMEMI_API_KEY=your_api_key_here
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+your_api_key_here を実際のAPIキーに置き換えてください。
+
+## 使用方法
+
+### ローカルでの実行
+
+開発サーバーを起動するには以下のコマンドを実行します。
+
+```bash
+yarn start
+```
+
+ブラウザで [http://localhost:3000](http://localhost:3000) を開くと、アプリケーションが表示されます。コードを編集すると、ページが自動的にリロードされます。
+
+### 本番用ビルド
+
+本番環境用にアプリケーションをビルドするには、以下のコマンドを実行します。
+
+```bash
+yarn build
+```
+
+最適化されたビルドが build ディレクトリに生成されます。
+
+## テスト
+
+プロジェクトには、JestとReact Testing Libraryを使用した包括的なテストが含まれています。
+
+### テストの実行
+
+全てのテストを実行するには、以下のコマンドを使用します。
+
+```bash
+yarn test
+```
+
+### テストカバレッジの取得
+
+テストカバレッジレポートを生成するには、以下のコマンドを実行します。
+
+```bash
+yarn test --coverage
+```
+
+カバレッジレポートは coverage ディレクトリに生成されます。
+
+## デプロイ
+
+アプリケーションはGitHub PagesとGitHub Actionsを使用してデプロイされます。
+
+### 継続的インテグレーションとデプロイ
+
+- CIワークフロー: [.github/workflows/ci.yml](./.github/workflows/ci.yml) 内の自動ワークフローが、main ブランチへのプッシュごとにリンティングとテストを実行。
+- CDワークフロー: [.github/workflows/deploy-ph-pages.yml](./.github/workflows/deploy-ph-pages.yml) 内のデプロイワークフローが、ビルド成功後に自動的にGitHub Pagesへデプロイ。
+
+ワークフローが適切に動作するために、リポジトリの設定画面で必要なシークレット（YUMEMI_API_KEY）を設定してください。
+
+## プロジェクト構成
+
+```
+src/
+  api/
+    population.ts
+    prefectures.ts
+  assets/
+    images/
+      logo.svg
+    styles/
+      PopulationChart.css
+      PopulationGraphPage.css
+      PrefectureCheckbox.css
+  components/
+    PopulationChart.tsx
+    PrefectureCheckbox.tsx
+  pages/
+    PopulationGraphPage.tsx
+  store/
+    usePrefecturesStore.ts
+  tests/
+    PopulationChart.test.tsx
+    PrefectureCheckbox.test.tsx
+    population.test.ts
+    prefectures.test.ts
+    prefecturesStore.test.ts
+  index.tsx
+```
+
+## ライセンス
+
+This software is released under the MIT License, see [LICENSE](./LICENSE).
+
+## お問い合わせ
+
+ご質問やフィードバックがありましたら、[crab85193@gmail.com](mailto:crab85193@gmail.com) までご連絡ください。
