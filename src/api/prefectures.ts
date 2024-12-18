@@ -16,7 +16,7 @@ export const fetchPrefectures = async (): Promise<Prefecture[]> => {
       throw new Error("Failed to fetch prefectures");
     }
 
-    return response.data as Prefecture[];
+    return response.data.result as Prefecture[];
   } catch (error) {
     throw new Error("Error fetching prefectures: " + error);
   }
