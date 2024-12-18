@@ -4,19 +4,13 @@ import { Prefecture } from "../types/prefecture";
 export const fetchPrefectures = async (): Promise<Prefecture[]> => {
   try {
     const response = await axios.get(
-      `${process.env.REACT_APP_YUMEMI_API_URL}/prefectures`,
+      `${process.env.REACT_APP_YUMEMI_API_URL}/api/v1/prefectures`,
       {
-        headers: {
-          "X-API-KEY": process.env.REACT_APP_YUMEMI_API_KEY!,
-        },
+        headers: { "X-API-KEY": process.env.REACT_APP_YUMEMI_API_KEY },
       }
     );
 
-    if (response.status !== 200) {
-      throw new Error("Failed to fetch prefectures");
-    }
-
-    return response.data as Prefecture[];
+    return response.data.result as Prefecture[];
   } catch (error) {
     throw new Error("Error fetching prefectures: " + error);
   }

@@ -6,7 +6,7 @@ export const fetchPopulation = async (
 ): Promise<PopulationCategory[]> => {
   try {
     const response = await axios.get<PopulationResponse>(
-      `${process.env.REACT_APP_YUMEMI_API_URL}/population/${prefCode}`,
+      `${process.env.REACT_APP_YUMEMI_API_URL}/api/v1/population/composition/perYear?prefCode=${prefCode}`,
       {
         headers: {
           "X-API-KEY": process.env.REACT_APP_YUMEMI_API_KEY!,
