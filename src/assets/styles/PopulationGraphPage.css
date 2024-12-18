@@ -1,0 +1,28 @@
+.wrapper {
+  max-width: 1140px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.message-area {
+  margin-bottom: 2rem;
+}
+
+.message-area p {
+  text-align: center;
+  font-weight: bold;
+  color: #6091d3;
+  background: #fff;
+  border: solid 2px #6091d3;
+  border-radius: 10px;
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+
+@media (min-width: 600px) {
+  .message-area {
+    margin-top: 4rem;
+  }
+}

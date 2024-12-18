@@ -6,6 +6,7 @@ import { fetchPrefectures } from "../api/prefectures";
 import { fetchPopulation } from "../api/population";
 import { Prefecture } from "../types/prefecture";
 import { PopulationData } from "../types/population";
+import "../assets/styles/PopulationGraphPage.css";
 
 interface PrefectureCategoryData {
   prefName: string;
@@ -92,18 +93,23 @@ const PopulationGraphPage: React.FC = () => {
     usePrefecturesStore.getState();
 
   return (
-    <div>
-      <h1>人口推移グラフ</h1>
+    <div className="wrapper">
       <PrefectureCheckbox
         prefectures={prefectures}
         onSelect={(prefCode: number) => togglePrefecture(prefCode)}
         onSelectAll={(prefCodes: number[]) => selectAllPrefectures(prefCodes)}
         onClearSelection={clearSelection}
       />
-      {selectedPrefectures.length === 0 && <p>都道府県を選択してください。</p>}
-      {loading && <p>データを取得中...</p>}
-      {error && <p>{error}</p>}
-      <PopulationChart allCategoriesData={allCategoriesData} />
+      <div className="message-area">
+        {selectedPrefectures.length === 0 && <p>都道府県を選択してください</p>}
+        {selectedPrefectures.length !== 0 && loading && (
+          <p>データを取得中...</p>
+        )}
+        {error && <p className="error-message">{error}</p>}
+      </div>
+      {selectedPrefectures.length !== 0 && !loading && (
+        <PopulationChart allCategoriesData={allCategoriesData} />
+      )}
     </div>
   );
 };

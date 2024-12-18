@@ -62,7 +62,7 @@ describe("PopulationChartコンポーネントのテスト", () => {
     render(<PopulationChart allCategoriesData={mockAllCategoriesData} />);
     const button = screen.getByText("年少人口");
     fireEvent.click(button);
-    expect(button).toHaveStyle("background-color: #007bff");
+    expect(button).toHaveClass("active");
   });
 
   it("データがない場合にエラーメッセージが表示される", () => {
