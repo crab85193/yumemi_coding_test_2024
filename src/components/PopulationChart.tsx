@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   LineChart,
   Line,
@@ -15,65 +15,53 @@ interface PopulationData {
   value: number;
 }
 
-interface PopulationCategory {
-  label: string;
-  data: PopulationData[];
-}
-
 interface PopulationChartProps {
-  data: PopulationCategory[];
+  data: { [key: string]: PopulationData[] };
+  prefectureNames: { [key: number]: string }; // 都道府県コードと都道府県名のマッピング
 }
 
-const PopulationChart: React.FC<PopulationChartProps> = ({ data }) => {
-  const [selectedCategory, setSelectedCategory] = useState("総人口");
+const PopulationChart: React.FC<PopulationChartProps> = ({
+  data,
+  prefectureNames,
+}) => {
+  const allYears = Object.values(data)
+    .flat()
+    .map((entry) => entry.year);
 
-  const selectedData = data.find(
-    (category) => category.label === selectedCategory
-  );
+  const uniqueYears = Array.from(new Set(allYears)).sort();
+
+  const combinedData = uniqueYears.map((year) => {
+    const entry: { [key: string]: number | string } = { year };
+    for (const [prefCode, populationData] of Object.entries(data)) {
+      const yearData = populationData.find((d) => d.year === year);
+      entry[prefCode] = yearData ? yearData.value : 0;
+    }
+    return entry;
+  });
 
   return (
     <div style={{ width: "100%", height: "500px" }}>
-      <div>
-        {data.map((category) => (
-          <button
-            key={category.label}
-            onClick={() => setSelectedCategory(category.label)}
-            style={{
-              margin: "5px",
-              padding: "10px",
-              backgroundColor:
-                category.label === selectedCategory ? "#007bff" : "#e0e0e0",
-              color: category.label === selectedCategory ? "#fff" : "#000",
-              border: "none",
-              borderRadius: "5px",
-            }}
-          >
-            {category.label}
-          </button>
-        ))}
-      </div>
-      {selectedData ? (
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart
-            data={selectedData.data}
-            margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="year" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart
+          data={combinedData}
+          margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="year" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          {Object.keys(data).map((prefCode) => (
             <Line
+              key={prefCode}
               type="monotone"
-              dataKey="value"
-              stroke="#8884d8"
-              activeDot={{ r: 8 }}
+              dataKey={prefCode}
+              name={prefectureNames[Number(prefCode)] || `都道府県 ${prefCode}`}
+              stroke={`#${Math.floor(Math.random() * 16777215).toString(16)}`} // ランダム色
             />
-          </LineChart>
-        </ResponsiveContainer>
-      ) : (
-        <p>データがありません</p>
-      )}
+          ))}
+        </LineChart>
+      </ResponsiveContainer>
     </div>
   );
 };
