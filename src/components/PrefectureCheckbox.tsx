@@ -1,31 +1,32 @@
 import React from "react";
 import { Prefecture } from "../types/prefecture";
-import usePrefecturesStore from "../store/prefecturesStore";
 
-const PrefectureCheckbox: React.FC<{ prefectures: Prefecture[] }> = ({
+interface PrefectureCheckboxProps {
+  prefectures: Prefecture[];
+  onSelect: (prefCode: number) => void;
+}
+
+const PrefectureCheckbox: React.FC<PrefectureCheckboxProps> = ({
   prefectures,
+  onSelect,
 }) => {
-  const { selectedPrefectures, togglePrefecture, selectAll, clearSelection } =
-    usePrefecturesStore();
-
   return (
     <div>
-      <h3>都道府県選択</h3>
+      <h3>都道府県を選択</h3>
       <button
-        onClick={() => selectAll(prefectures.map((pref) => pref.prefCode))}
+        onClick={() => prefectures.forEach((pref) => onSelect(pref.prefCode))}
       >
         すべて選択
       </button>
-      <button onClick={clearSelection}>選択をクリア</button>
+      <button onClick={() => onSelect(0)}>選択をクリア</button>{" "}
       {prefectures.map((prefecture) => (
         <div key={prefecture.prefCode}>
           <input
             type="checkbox"
-            id={prefecture.prefCode.toString()}
-            checked={selectedPrefectures.includes(prefecture.prefCode)}
-            onChange={() => togglePrefecture(prefecture.prefCode)}
+            id={`pref-${prefecture.prefCode}`}
+            onChange={() => onSelect(prefecture.prefCode)}
           />
-          <label htmlFor={prefecture.prefCode.toString()}>
+          <label htmlFor={`pref-${prefecture.prefCode}`}>
             {prefecture.prefName}
           </label>
         </div>
