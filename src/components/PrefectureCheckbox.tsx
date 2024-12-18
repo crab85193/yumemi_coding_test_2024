@@ -7,18 +7,16 @@ interface PrefectureCheckboxProps {
 }
 
 const PrefectureCheckbox: React.FC<PrefectureCheckboxProps> = ({
-  prefectures,
+  prefectures = [],
   onSelect,
 }) => {
+  if (!Array.isArray(prefectures)) {
+    return null;
+  }
+
   return (
     <div>
       <h3>都道府県を選択</h3>
-      <button
-        onClick={() => prefectures.forEach((pref) => onSelect(pref.prefCode))}
-      >
-        すべて選択
-      </button>
-      <button onClick={() => onSelect(0)}>選択をクリア</button>{" "}
       {prefectures.map((prefecture) => (
         <div key={prefecture.prefCode}>
           <input
