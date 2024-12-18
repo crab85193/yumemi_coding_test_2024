@@ -1,54 +1,71 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import PrefectureCheckbox from "./../components/PrefectureCheckbox";
-import { Prefecture } from "../types/prefecture";
+import usePrefecturesStore from "../store/prefecturesStore";
+import PrefectureCheckbox from "../components/PrefectureCheckbox";
 
-const mockPrefectures: Prefecture[] = [
-  { prefCode: 1, prefName: "北海道" },
-  { prefCode: 2, prefName: "青森県" },
-];
+jest.mock("../store/prefecturesStore", () => ({
+  __esModule: true,
+  default: jest.fn(),
+}));
 
-describe("PrefectureCheckbox", () => {
-  it("都道府県のチェックボックスを表示する", () => {
-    render(
-      <PrefectureCheckbox
-        prefectures={mockPrefectures}
-        selectedPrefectures={[]}
-        onSelect={() => {}}
-      />
-    );
+describe("PrefectureCheckboxコンポーネントの動作", () => {
+  const mockPrefectures = [
+    { prefCode: 1, prefName: "北海道" },
+    { prefCode: 2, prefName: "青森県" },
+    { prefCode: 3, prefName: "岩手県" },
+  ];
+
+  let mockTogglePrefecture: jest.Mock;
+  let mockSelectAll: jest.Mock;
+  let mockClearSelection: jest.Mock;
+
+  beforeEach(() => {
+    mockTogglePrefecture = jest.fn();
+    mockSelectAll = jest.fn();
+    mockClearSelection = jest.fn();
+
+    (
+      usePrefecturesStore as jest.MockedFunction<typeof usePrefecturesStore>
+    ).mockImplementation(() => ({
+      selectedPrefectures: [],
+      togglePrefecture: mockTogglePrefecture,
+      selectAll: mockSelectAll,
+      clearSelection: mockClearSelection,
+    }));
+  });
+
+  it("都道府県が正しくレンダリングされる", () => {
+    render(<PrefectureCheckbox prefectures={mockPrefectures} />);
 
     mockPrefectures.forEach((pref) => {
       expect(screen.getByLabelText(pref.prefName)).toBeInTheDocument();
     });
   });
 
-  it("チェックボックスをクリックすると選択状態が変更される", () => {
-    const mockOnSelect = jest.fn();
-    render(
-      <PrefectureCheckbox
-        prefectures={mockPrefectures}
-        selectedPrefectures={[]}
-        onSelect={mockOnSelect}
-      />
-    );
+  it("チェックボックスをクリックすると状態が切り替わる", () => {
+    render(<PrefectureCheckbox prefectures={mockPrefectures} />);
 
     const checkbox = screen.getByLabelText("北海道");
     fireEvent.click(checkbox);
 
-    expect(mockOnSelect).toHaveBeenCalledWith(["1"]);
+    expect(mockTogglePrefecture).toHaveBeenCalledWith(1);
   });
 
-  it("選択済みの都道府県のチェックボックスはチェックされている", () => {
-    render(
-      <PrefectureCheckbox
-        prefectures={mockPrefectures}
-        selectedPrefectures={["1"]}
-        onSelect={() => {}}
-      />
-    );
+  it("全て選択ボタンが正しく動作する", () => {
+    render(<PrefectureCheckbox prefectures={mockPrefectures} />);
 
-    expect(screen.getByLabelText("北海道")).toBeChecked();
-    expect(screen.getByLabelText("青森県")).not.toBeChecked();
+    const selectAllButton = screen.getByText("すべて選択");
+    fireEvent.click(selectAllButton);
+
+    expect(mockSelectAll).toHaveBeenCalledWith([1, 2, 3]);
+  });
+
+  it("選択をクリアボタンが正しく動作する", () => {
+    render(<PrefectureCheckbox prefectures={mockPrefectures} />);
+
+    const clearButton = screen.getByText("選択をクリア");
+    fireEvent.click(clearButton);
+
+    expect(mockClearSelection).toHaveBeenCalled();
   });
 });
