@@ -30,7 +30,7 @@ describe("fetchPopulation", () => {
 
     expect(result).toEqual(mockData);
     expect(mockedAxios.get).toHaveBeenCalledWith(
-      `${process.env.REACT_APP_YUMEMI_API_URL}/api/v1/population/composition/perYear?prefCode=${prefCode}`,
+      `https://yumemi-frontend-engineer-codecheck-api.vercel.app/api/v1/population/composition/perYear?prefCode=${prefCode}`,
       {
         headers: {
           "X-API-KEY": process.env.REACT_APP_YUMEMI_API_KEY!,
@@ -48,7 +48,7 @@ describe("fetchPopulation", () => {
       "Error fetching population data: Error: API Error"
     );
     expect(mockedAxios.get).toHaveBeenCalledWith(
-      `${process.env.REACT_APP_YUMEMI_API_URL}/api/v1/population/composition/perYear?prefCode=${prefCode}`,
+      `https://yumemi-frontend-engineer-codecheck-api.vercel.app/api/v1/population/composition/perYear?prefCode=${prefCode}`,
       {
         headers: {
           "X-API-KEY": process.env.REACT_APP_YUMEMI_API_KEY!,
