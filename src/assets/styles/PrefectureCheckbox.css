@@ -1,0 +1,51 @@
+.prefecture-checkbox__wrapper {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.prefecture-checkbox .subtitle {
+  margin-top: 1rem;
+  padding: 0.5em 0.5em;
+  background: transparent;
+  border-left: solid 5px #7db4e6;
+  font-size: large;
+}
+
+.prefecture-checkbox .button-area {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.prefecture-checkbox .button-area button {
+  margin-right: 5px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  background-color: #e0e0e0;
+  color: #000;
+}
+
+.prefecture-checkbox .button-area button:hover {
+  background-color: #7aa3da;
+  color: #fff;
+}
+
+.prefecture-checkbox .button-area button:active {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.prefecture-checkbox .checkbox-area {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+@media (min-width: 600px) {
+  .prefecture-checkbox .checkbox-area {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+  }
+}

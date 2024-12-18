@@ -9,6 +9,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import "../assets/styles/PopulationChart.css";
 
 interface PopulationData {
   year: number;
@@ -59,7 +60,7 @@ const PopulationChart: React.FC<PopulationChartProps> = ({
   const prefectureDataArray = allCategoriesData[selectedCategory] || [];
 
   if (prefectureDataArray.length === 0) {
-    return <p>選択中のカテゴリのデータがありません</p>;
+    return <span>選択中のカテゴリのデータがありません</span>;
   }
 
   const allYears = prefectureDataArray.flatMap((p) =>
@@ -79,28 +80,18 @@ const PopulationChart: React.FC<PopulationChartProps> = ({
   const prefNames = prefectureDataArray.map((p) => p.prefName);
 
   return (
-    <div style={{ width: "100%", height: "500px" }}>
-      {/* カテゴリ切り替えUI */}
-      <div style={{ marginBottom: "10px" }}>
+    <div className="population-chart population-chart__wrapper">
+      <div className="button-area">
         {categories.map((cat) => (
           <button
             key={cat}
             onClick={() => setSelectedCategory(cat)}
-            style={{
-              marginRight: "5px",
-              padding: "5px 10px",
-              backgroundColor: cat === selectedCategory ? "#007bff" : "#e0e0e0",
-              color: cat === selectedCategory ? "#fff" : "#000",
-              border: "none",
-              borderRadius: "3px",
-              cursor: "pointer",
-            }}
+            className={cat === selectedCategory ? "active" : ""}
           >
             {cat}
           </button>
         ))}
       </div>
-
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
           data={combinedData}
