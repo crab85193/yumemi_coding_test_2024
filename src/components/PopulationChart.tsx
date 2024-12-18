@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   LineChart,
   Line,
@@ -13,34 +13,94 @@ import {
 interface PopulationData {
   year: number;
   value: number;
+  rate: number;
+}
+
+interface PrefectureCategoryData {
+  prefName: string;
+  data: PopulationData[];
+}
+
+interface AllCategoriesData {
+  [categoryName: string]: PrefectureCategoryData[];
 }
 
 interface PopulationChartProps {
-  data: { [key: string]: PopulationData[] };
-  prefectureNames: { [key: number]: string }; // 都道府県コードと都道府県名のマッピング
+  allCategoriesData: AllCategoriesData;
 }
 
-const PopulationChart: React.FC<PopulationChartProps> = ({
-  data,
-  prefectureNames,
-}) => {
-  const allYears = Object.values(data)
-    .flat()
-    .map((entry) => entry.year);
+const categories = ["総人口", "年少人口", "生産年齢人口", "老年人口"];
 
-  const uniqueYears = Array.from(new Set(allYears)).sort();
+const colorMap: { [prefName: string]: string } = {};
+
+const generateRandomColor = (): string => {
+  const letters = "0123456789ABCDEF";
+  let color = "#";
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+};
+
+const getColorForPrefName = (pName: string) => {
+  if (!colorMap[pName]) {
+    colorMap[pName] = generateRandomColor();
+  }
+  return colorMap[pName];
+};
+
+const PopulationChart: React.FC<PopulationChartProps> = ({
+  allCategoriesData,
+}) => {
+  const [selectedCategory, setSelectedCategory] = useState<string>(
+    categories[0]
+  );
+
+  const prefectureDataArray = allCategoriesData[selectedCategory] || [];
+
+  if (prefectureDataArray.length === 0) {
+    return <p>選択中のカテゴリのデータがありません</p>;
+  }
+
+  const allYears = prefectureDataArray.flatMap((p) =>
+    p.data.map((d) => d.year)
+  );
+  const uniqueYears = Array.from(new Set(allYears)).sort((a, b) => a - b);
 
   const combinedData = uniqueYears.map((year) => {
     const entry: { [key: string]: number | string } = { year };
-    for (const [prefCode, populationData] of Object.entries(data)) {
-      const yearData = populationData.find((d) => d.year === year);
-      entry[prefCode] = yearData ? yearData.value : 0;
+    for (const pData of prefectureDataArray) {
+      const yearData = pData.data.find((d) => d.year === year);
+      entry[pData.prefName] = yearData ? yearData.value : 0;
     }
     return entry;
   });
 
+  const prefNames = prefectureDataArray.map((p) => p.prefName);
+
   return (
     <div style={{ width: "100%", height: "500px" }}>
+      {/* カテゴリ切り替えUI */}
+      <div style={{ marginBottom: "10px" }}>
+        {categories.map((cat) => (
+          <button
+            key={cat}
+            onClick={() => setSelectedCategory(cat)}
+            style={{
+              marginRight: "5px",
+              padding: "5px 10px",
+              backgroundColor: cat === selectedCategory ? "#007bff" : "#e0e0e0",
+              color: cat === selectedCategory ? "#fff" : "#000",
+              border: "none",
+              borderRadius: "3px",
+              cursor: "pointer",
+            }}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
           data={combinedData}
@@ -51,13 +111,13 @@ const PopulationChart: React.FC<PopulationChartProps> = ({
           <YAxis />
           <Tooltip />
           <Legend />
-          {Object.keys(data).map((prefCode) => (
+          {prefNames.map((pName) => (
             <Line
-              key={prefCode}
+              key={pName}
               type="monotone"
-              dataKey={prefCode}
-              name={prefectureNames[Number(prefCode)] || `都道府県 ${prefCode}`}
-              stroke={`#${Math.floor(Math.random() * 16777215).toString(16)}`} // ランダム色
+              dataKey={pName}
+              name={pName}
+              stroke={getColorForPrefName(pName)}
             />
           ))}
         </LineChart>

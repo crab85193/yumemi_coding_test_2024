@@ -1,5 +1,5 @@
 import { act } from "react";
-import usePrefecturesStore from "../store/prefecturesStore";
+import usePrefecturesStore from "../store/usePrefecturesStore";
 
 describe("都道府県ストアの動作", () => {
   beforeEach(() => {

@@ -7,12 +7,23 @@ import { fetchPopulation } from "../api/population";
 import { Prefecture } from "../types/prefecture";
 import { PopulationData } from "../types/population";
 
+interface PrefectureCategoryData {
+  prefName: string;
+  data: PopulationData[];
+}
+
+interface AllCategoriesData {
+  [categoryName: string]: PrefectureCategoryData[];
+}
+
+const categories = ["総人口", "年少人口", "生産年齢人口", "老年人口"];
+
 const PopulationGraphPage: React.FC = () => {
   const { selectedPrefectures, prefectures, setPrefectures } =
     usePrefecturesStore();
-  const [populationData, setPopulationData] = useState<{
-    [key: string]: PopulationData[];
-  }>({});
+  const [allCategoriesData, setAllCategoriesData] = useState<AllCategoriesData>(
+    {}
+  );
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -29,24 +40,35 @@ const PopulationGraphPage: React.FC = () => {
   }, [setPrefectures]);
 
   useEffect(() => {
-    const fetchPopulationData = async (): Promise<void> => {
+    const fetchPopulationData = async () => {
       setLoading(true);
       setError(null);
 
-      const newPopulationData: { [key: string]: PopulationData[] } = {};
+      const newAllCategoriesData: AllCategoriesData = {
+        総人口: [],
+        年少人口: [],
+        生産年齢人口: [],
+        老年人口: [],
+      };
 
       try {
         for (const prefCode of selectedPrefectures) {
-          const categories = await fetchPopulation(prefCode.toString());
-          const totalPopulation = categories.find(
-            (category) => category.label === "総人口"
-          )?.data;
+          const categoriesData = await fetchPopulation(prefCode.toString());
+          const prefName =
+            prefectures.find((p) => p.prefCode === Number(prefCode))
+              ?.prefName || prefCode.toString();
 
-          if (totalPopulation) {
-            newPopulationData[prefCode.toString()] = totalPopulation;
+          for (const catName of categories) {
+            const catData = categoriesData.find((c) => c.label === catName);
+            if (catData) {
+              newAllCategoriesData[catName].push({
+                prefName: prefName,
+                data: catData.data,
+              });
+            }
           }
         }
-        setPopulationData(newPopulationData);
+        setAllCategoriesData(newAllCategoriesData);
       } catch (err) {
         setError("人口データの取得に失敗しました:" + err);
       } finally {
@@ -57,30 +79,31 @@ const PopulationGraphPage: React.FC = () => {
     if (selectedPrefectures.length > 0) {
       fetchPopulationData();
     } else {
-      setPopulationData({});
+      setAllCategoriesData({
+        総人口: [],
+        年少人口: [],
+        生産年齢人口: [],
+        老年人口: [],
+      });
     }
-  }, [selectedPrefectures]);
+  }, [selectedPrefectures, prefectures]);
+
+  const { togglePrefecture, selectAllPrefectures, clearSelection } =
+    usePrefecturesStore.getState();
 
   return (
     <div>
       <h1>人口推移グラフ</h1>
       <PrefectureCheckbox
         prefectures={prefectures}
-        onSelect={(prefCode: number) => {
-          const { togglePrefecture } = usePrefecturesStore.getState();
-          togglePrefecture(prefCode);
-        }}
+        onSelect={(prefCode: number) => togglePrefecture(prefCode)}
+        onSelectAll={(prefCodes: number[]) => selectAllPrefectures(prefCodes)}
+        onClearSelection={clearSelection}
       />
       {selectedPrefectures.length === 0 && <p>都道府県を選択してください。</p>}
       {loading && <p>データを取得中...</p>}
       {error && <p>{error}</p>}
-      <PopulationChart
-        data={populationData}
-        prefectureNames={prefectures.reduce(
-          (acc, pref) => ({ ...acc, [pref.prefCode]: pref.prefName }),
-          {}
-        )}
-      />
+      <PopulationChart allCategoriesData={allCategoriesData} />
     </div>
   );
 };

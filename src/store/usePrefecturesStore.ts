@@ -1,28 +1,35 @@
 import { create } from "zustand";
-import { Prefecture } from "../types/prefecture";
+
+interface Prefecture {
+  prefCode: number;
+  prefName: string;
+}
 
 interface PrefecturesState {
-  selectedPrefectures: number[];
   prefectures: Prefecture[];
-  togglePrefecture: (prefCode: number) => void;
+  selectedPrefectures: number[];
   setPrefectures: (prefectures: Prefecture[]) => void;
+  togglePrefecture: (prefCode: number) => void;
+  selectAllPrefectures: (prefCodes: number[]) => void;
   clearSelection: () => void;
+  selectAll: (prefCodes: number[]) => void;
 }
 
 const usePrefecturesStore = create<PrefecturesState>((set) => ({
-  selectedPrefectures: [],
   prefectures: [],
-  togglePrefecture: (prefCode: number) =>
+  selectedPrefectures: [],
+  setPrefectures: (prefectures) => set({ prefectures }),
+  togglePrefecture: (prefCode) =>
     set((state) => ({
       selectedPrefectures: state.selectedPrefectures.includes(prefCode)
         ? state.selectedPrefectures.filter((code) => code !== prefCode)
         : [...state.selectedPrefectures, prefCode],
     })),
-  setPrefectures: (prefectures: Prefecture[]) => set(() => ({ prefectures })),
-  clearSelection: () =>
-    set(() => ({
-      selectedPrefectures: [],
-    })),
+  selectAllPrefectures: (prefCodes: number[]) =>
+    set({ selectedPrefectures: prefCodes }),
+  clearSelection: () => set({ selectedPrefectures: [] }),
+
+  selectAll: (prefCodes: number[]) => set({ selectedPrefectures: prefCodes }),
 }));
 
 export default usePrefecturesStore;
