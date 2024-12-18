@@ -21,7 +21,7 @@ describe("fetchPrefectures", () => {
 
     expect(result).toEqual(mockData);
     expect(mockedAxios.get).toHaveBeenCalledWith(
-      `${process.env.REACT_APP_YUMEMI_API_URL}/api/v1/prefectures`,
+      `https://yumemi-frontend-engineer-codecheck-api.vercel.app/api/v1/prefectures`,
       {
         headers: { "X-API-KEY": process.env.REACT_APP_YUMEMI_API_KEY },
       }
